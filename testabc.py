@@ -8,6 +8,7 @@ sys.setdefaultencoding('utf-8')
 
 class Addrdict(object):
 	def __init__(self):
+		self.pikdict ={}
 		self.headers = {
             'Host':'s3plus.meituan.net',
             'User-Agent':'Mozilla/5.0 (Linux; U; Android 4.1.2; zh-cn; Chitanda/Akari) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/6.0.0.58_r884092.501 NetType/WIFI'
@@ -36,7 +37,35 @@ class Addrdict(object):
 		print 'get svg sucessfully'
 		return resp.text
 	def set_pik_dict(self):
-		
+		url = 'http://s3plus.meituan.net/v1/mss_0a06a471f9514fc79c981b5466f56b91/svgtextcss/4fb494446f78aaedb88026ae33420b94.css'
+		css_html = self.get_css(url)
+		f  = open("test.log",'w+')
+		f.write(css_html)
+		regex = re.compile('(pik.*?){background:-(\d+)\.0px.*?-(\d+)\.0px')
+		results = re.findall(regex,css_html)
+		url2 = 'http://s3plus.meituan.net/v1/mss_0a06a471f9514fc79c981b5466f56b91/svgtextcss/9dd500a7af53417f1b65c7a65b6c25ff.svg'
+		svg_html = self.get_svg(url2)
+		soup = BeautifulSoup(svg_html,'lxml')
+		M0nodes = soup.find_all('path')
+		contents = soup.find_all('textpath')
+		for result in results:
+			index = result[0]
+			print index,result[1],result[2]
+			x = result[1]
+			y = result[2]
+			tx = int(x)/14
+			ty = int(y)+23
+			for node in M0nodes:
+				s = node.get('d')
+				flag = re.match('M0.*?(\d+).*?H600',s)
+				if(ty==int(flag.group(1))):
+					row  = int(node.get('id'))
+					print 'find row,%d' % row
+					break;
+			goal = contents[row-1]
+			print (goal.string)[tx]
+			self.pikdict[index] = (goal.string)[tx]
+		print self.pikdict['pikbzp']
 	def get_pik(self,index):
 		url = 'http://s3plus.meituan.net/v1/mss_0a06a471f9514fc79c981b5466f56b91/svgtextcss/4fb494446f78aaedb88026ae33420b94.css'
 		css_html = self.get_css(url)
@@ -57,7 +86,6 @@ class Addrdict(object):
 		soup = BeautifulSoup(svg_html,'lxml')
 		M0nodes = soup.find_all('path')
 		contents = soup.find_all('textpath')
-		print contents
 		for node in M0nodes:
 			s = node.get('d')
 			flag = re.match('M0.*?(\d+).*?H600',s)
@@ -66,14 +94,8 @@ class Addrdict(object):
 				print 'find row,%d' % row
 				break;
 		goal = contents[row-1]
-		print goal.string
 		return (goal.string)[tx]
 if __name__ == "__main__":
 	d = Addrdict()
-	i = raw_input("shuru:\n")
-	if i.startswith('xkz'):
-		s = d.get_xkz(i)
-		print s
-	else:
-		s = d.get_pik(i)
-		print s
+	d.set_pik_dict()
+	

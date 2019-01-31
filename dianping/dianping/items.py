@@ -21,6 +21,8 @@ class DianpingItem(scrapy.Item):
     comments_count = scrapy.Field()
     #评论数大于100
     is_more_than_100 = scrapy.Field()
+	#均价
+	price = scrapy.Field()
     #菜系
     foodtype = scrapy.Field()
     #星级

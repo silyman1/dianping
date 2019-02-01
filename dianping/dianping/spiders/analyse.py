@@ -25,9 +25,22 @@ class Addrdict(object):
 				'xkzolq':'8',
 				'xkzols':'9',
 		 }
+		self.ug ={
+				'ugmab':'0',
+				'1':'1',
+				'ugevc':'2',
+				'ug5y2':'3',
+				'ugtzu':'4',
+				'ugng0':'5',
+				'ugjff':'6',
+				'ugf6b':'7',
+				'ugi45':'8',
+				'ug636':'9',
+		 }
 	def get_xkz(self,index):
 		return self.xkz[index]
-		
+	def get_ug(self,index):
+		return self.ug[index]
 	def get_css(self,url):
 		resp = requests.get(url,headers=self.headers)
 		print 'get css sucessfully'

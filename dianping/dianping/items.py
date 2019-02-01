@@ -11,18 +11,22 @@ import scrapy
 class DianpingItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    #编号
+    No = scrapy.Field()
     #店名
     shop = scrapy.Field()
     #行政区
     district = scrapy.Field()
     #街道
     street = scrapy.Field()
+    #地址
+    address = scrapy.Field()
     #评论数
     comments_count = scrapy.Field()
     #评论数大于100
     is_more_than_100 = scrapy.Field()
-	#均价
-	price = scrapy.Field()
+    #均价
+    price = scrapy.Field()
     #菜系
     foodtype = scrapy.Field()
     #星级

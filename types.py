@@ -41,11 +41,14 @@ class Prepare(object):
 		results = soup.find('div',attrs = {'id':'region-nav','class':"nc-items"})
 		for child in results.find_all('a'):
 			url2 = child.get('href')
+			print 'url2',url2
 			streets_html = requests.get(url2,headers = self.headers)
 			soup2 = BeautifulSoup(streets_html.text)
-			items = soup.find('div',attrs = {'id':'J_nt_items'})
+			self.districts.add('r'+str(child.get('data-cat-id')))
+			items = soup2.find('div',attrs = {'id':'region-nav-sub'})
 			for item in items.find_all('a'):
 				self.districts.add('r'+str(item.get('data-cat-id')))
+				print item.get('data-cat-id')
 		print self.districts
 		return self.districts
 if __name__ == '__main__':

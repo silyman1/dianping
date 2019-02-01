@@ -13,14 +13,19 @@ BOT_NAME = 'dianping'
 
 SPIDER_MODULES = ['dianping.spiders']
 NEWSPIDER_MODULE = 'dianping.spiders'
+# DOWNLOADER_MIDDLEWARES = {  
 
+     # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware':None,  
+     # 'dianping.middlewares.ProxyMiddleWare':543,  
+     # 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware':None  
+# }  
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'dianping (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
-
+ROBOTSTXT_OBEY = False
+DOWNLOAD_DELAY = 1
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 

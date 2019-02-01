@@ -6,8 +6,41 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
-
+import random  
+import scrapy 
+class ProxyMiddleWare(object):  
+    """docstring for ProxyMiddleWare"""  
+    def process_request(self,request, spider):  
+        '''对request对象加上proxy'''  
+        print '*********************************************'
+        proxy = self.get_random_proxy()  
+        print("this is request ip:"+proxy)  
+        request.meta['proxy'] = proxy   
+  
+  
+    def process_response(self, request, response, spider):  
+        '''对返回的response处理'''  
+        # 如果返回的response状态不是200，重新生成当前request对象  
+        print '++++++++++++++++++++++++++++++++++++++++++++++++++++'
+        if response.status != 200:  
+            proxy = self.get_random_proxy()  
+            print "error use new proxy this is response ip:"+proxy  
+            # 对当前reque加上代理  
+            request.meta['proxy'] = proxy   
+            return request  
+        return response  
+  
+    def get_random_proxy(self):  
+        '''随机从文件中读取proxy'''  
+        while 1:  
+            with open(r'dianping\proxies.txt', 'r') as f:  
+                proxies = f.readlines()  
+            if proxies:  
+                break  
+            else:  
+                time.sleep(1)  
+        proxy = random.choice(proxies).strip()  
+        return proxy  
 class DianpingSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the

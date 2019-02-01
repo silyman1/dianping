@@ -21,8 +21,6 @@ class Prepare(object):
 		base_html = self.get_base_html()
 		soup = BeautifulSoup(base_html.text)
 		results = soup.find('div',attrs = {'id':'classfy','class':"nc-items"})
-		f  = open("test.log",'w+')
-		sys.stdout = f
 		for child in results.find_all('a'):
 			url2 = child.get('href')
 			food_html = requests.get(url2,headers = self.headers)
@@ -41,9 +39,10 @@ class Prepare(object):
 		results = soup.find('div',attrs = {'id':'region-nav','class':"nc-items"})
 		for child in results.find_all('a'):
 			url2 = child.get('href')
+			# self.districts.add('r'+str(child.get('data-cat-id')))
 			streets_html = requests.get(url2,headers = self.headers)
 			soup2 = BeautifulSoup(streets_html.text)
-			items = soup.find('div',attrs = {'id':'J_nt_items'})
+			items = soup2.find('div',attrs = {'id':'region-nav-sub'})
 			for item in items.find_all('a'):
 				self.districts.add('r'+str(item.get('data-cat-id')))
 		print self.districts

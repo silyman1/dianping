@@ -19,6 +19,28 @@ NEWSPIDER_MODULE = 'dianping.spiders'
      # 'dianping.middlewares.ProxyMiddleWare':543,  
      # 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware':None  
 # }  
+FEED_EXPORTERS = {
+    'csv': 'dianping.csv_order.MyProjectCsvItemExporter',
+} 
+FIELDS_TO_EXPORT = [
+    'No',
+    'shop',
+    'district',
+    'street',
+	'comments_count',
+	'is_more_than_100',
+	'price',
+	'price_range',
+	'foodtype',
+	'foodtype2',
+	'star_level',
+	'flavour',
+	'environment',
+	'service',
+	'longitude',
+	'latitude',
+	'overall_score'
+]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'dianping (+http://www.yourdomain.com)'

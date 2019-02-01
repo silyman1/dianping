@@ -27,8 +27,12 @@ class DianpingItem(scrapy.Item):
     is_more_than_100 = scrapy.Field()
     #均价
     price = scrapy.Field()
-    #菜系
+	#价格区间
+	price_range = scrapy.Field()
+    #菜系大类
     foodtype = scrapy.Field()
+    #菜系小类
+    foodtype2 = scrapy.Field()
     #星级
     star_level = scrapy.Field()
     #口味

@@ -23,9 +23,10 @@ class Prepare(object):
 		results = soup.find('div',attrs = {'id':'classfy','class':"nc-items"})
 		for child in results.find_all('a'):
 			url2 = child.get('href')
+			# self.foodtype.add('g'+str(child.get('data-cat-id')))
 			food_html = requests.get(url2,headers = self.headers)
 			soup2 = BeautifulSoup(food_html.text)
-			items = soup.find('div',attrs = {"class":"con"})
+			items = soup2.find('div',attrs = {"class":"con"})
 			if(items == []):
 				print url2
 				continue

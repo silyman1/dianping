@@ -92,13 +92,24 @@ class DianpingSpider(Spider):
 			#地址
 			item['address'] = temp[1].get('data-address').strip()
 			print item['shop'],':',item['address']
+			if(len(dis)==4):
+				#行政区
+				item['district'] = dis[2].string
+				#街道
+				item['street'] = dis[3].string
+				#菜系大类
+				item['foodtype'] = dis[1].string
+				#菜系小类
+				item['foodtype2'] = dis[1].string
+			else：
 			#行政区
-			item['district'] = dis[2].string
-			#街道
-			item['street'] = dis[3].string
-			#菜系
-			item['foodtype'] = dis[1].string
-			
+				item['district'] = dis[3].string
+				#街道
+				item['street'] = dis[4].string
+				#菜系大类
+				item['foodtype'] = dis[1].string
+				#菜系小类
+				item['foodtype2'] = dis[2].string
 			temp2 = shopitem.find('div',attrs={'class':'txt'}).find('div',attrs={'class':'comment'})
 			
 			#星级
@@ -138,10 +149,23 @@ class DianpingSpider(Spider):
 						p += self.ug[index]
 				item['price'] = p 
 			else:
-				item['price'] = '-'
+				item['price'] = '-未知'
 			print 'price:',item['price']
-			
-			
+			#价格区间
+			if item['price'] == '-未知':
+				item['price_range'] ='-未知'
+			else if int(item['price']) <20:
+				item['price_range'] ='0-20元'
+			else if int(item['price']) >=20 and int(item['price'])<50:
+				item['price_range'] ='20-50元'
+			else if int(item['price']) >=50 and int(item['price'])<100:
+				item['price_range'] ='50-100元'
+			else if int(item['price']) >=100 and int(item['price'])<200:
+				item['price_range'] ='100-200元'
+			else if int(item['price']) >=200 and int(item['price'])<500:
+				item['price_range'] ='200-500元'
+			else if int(item['price']) >=500:
+				item['price_range'] ='500元以上'
 			temp3 = shopitem.find('div',attrs={'class':'txt'}).find('span',attrs={'class':'comment-list'})
 			if temp3:
 				try:

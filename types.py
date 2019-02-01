@@ -27,7 +27,7 @@ class Prepare(object):
 			url2 = child.get('href')
 			food_html = requests.get(url2,headers = self.headers)
 			soup2 = BeautifulSoup(food_html.text)
-			items = soup.find('div',attrs = {"class":"con"})
+			items = soup2.find('div',attrs = {"class":"con"})
 			if(items == []):
 				print url2
 				continue
@@ -53,5 +53,6 @@ class Prepare(object):
 		return self.districts
 if __name__ == '__main__':
 	 p = Prepare()
-	 p.get_foodtypes()
-	 p.get_districts()
+	 a = p.get_foodtypes()
+	 b = p.get_districts()
+	 print len(a)*len(b)

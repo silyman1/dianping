@@ -34,6 +34,7 @@ FIELDS_TO_EXPORT = [
 	'foodtype',
 	'foodtype2',
 	'star_level',
+	'score',
 	'flavour',
 	'environment',
 	'service',
@@ -48,6 +49,7 @@ FIELDS_TO_EXPORT = [
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 DOWNLOAD_DELAY = 1
+COOKIES_ENABLED = False
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 

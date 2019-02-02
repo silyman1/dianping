@@ -2,7 +2,7 @@
 import requests
 
 def geocodeG(address):
-    par = {'address': address, 'key': 'cb649a25c1f81c1451adbeca73623251'}
+    par = {'address': address, 'key': '44004bce62f708e61df776b076bb1b92'}
     base = 'http://restapi.amap.com/v3/geocode/geo'
     response = requests.get(base, par)
     answer = response.json()

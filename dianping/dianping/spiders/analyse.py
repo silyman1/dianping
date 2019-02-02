@@ -37,10 +37,42 @@ class Addrdict(object):
 				'ugi45':'8',
 				'ug636':'9',
 		 }
+		self.ge ={
+				'gedy0':'0',
+				'1':'1',
+				'get03':'2',
+				'ge83g':'3',
+				'ge04l':'4',
+				'geaqa':'5',
+				'gesbd':'6',
+				'ge6d7':'7',
+				'geg39':'8',
+				'gevd8':'9',
+		 } 
+		self.scoremap = {
+					'5':'五星商户',
+					'4':'四星商户',
+					'3':'三星商户',
+					'2':'二星商户',
+					'1':'一星商户',
+					'4.5':'准五星商户',
+					'3.5':'准四星商户',
+					'2.5':'准三星商户',
+					'1.5':'准二星商户',
+					'0.5':'准一星商户',
+					'0':'该商户暂无星级',
+					}
+	def get_score(self,index):
+		for key,value in self.scoremap.items():
+			if value==index:
+				return key
+		return u'无'
 	def get_xkz(self,index):
 		return self.xkz[index]
 	def get_ug(self,index):
 		return self.ug[index]
+	def get_ge(self,index):
+		return self.ge[index]
 	def get_css(self,url):
 		resp = requests.get(url,headers=self.headers)
 		print 'get css sucessfully'

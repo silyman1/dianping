@@ -57,6 +57,7 @@ class Prepare(object):
 				self.urls.append(url4)
 	def get_urls(self):
 		base_html = self.get_base_html()
+		print base_html.text
 		soup = BeautifulSoup(base_html.text)
 		results = soup.find('div',attrs = {'id':'classfy','class':"nc-items"})
 		for child in results.find_all('a'):

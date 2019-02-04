@@ -64,7 +64,7 @@ class DianpingSpider(Spider):
 		soup = BeautifulSoup(response.text)
 		pages = soup.find('div',attrs={"class":'page'})
 		print 'firsturl:',url,'count:',self.count
-		if url == '':
+		if url.startswith('https://verify.meituan.com/'):
 			self.urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
 			self.urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
 			self.crawler.engine.close_spider(self, u'出现验证码,关闭爬虫')
@@ -87,7 +87,7 @@ class DianpingSpider(Spider):
 			# yield scrapy.Request(url=str(shop_url.extract()), headers = self.headers[choice],callback=self.parse_detail)
 	def parse_detail(self,response):
 		print '========detail url',str(response.url)
-		if response.url == '':
+		if url.startswith('https://verify.meituan.com/'):
 			self.urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
 			self.urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
 			self.crawler.engine.close_spider(self, u'出现验证码,关闭爬虫')

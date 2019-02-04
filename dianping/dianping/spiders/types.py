@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
+from urlmanager import  UrlManager
 import re
 import sys
 reload(sys)
@@ -16,8 +17,6 @@ class Prepare(object):
 		self.foodtype = set()
 		self.districts = set()
 		self.urls = [] 
-		self.fo = open("url.log",'w+')
-		sys.stdout = self.fo
 	def get_base_html(self):
 		base_html = requests.get(self.base_url,headers = self.headers)
 		return base_html
@@ -73,13 +72,22 @@ class Prepare(object):
 			items = soup2.find('div',attrs = {"id":"classfy-sub"})
 			if(items == None):
 				print 'error:',url2
+				self.urls.append(url2)
 				continue
 			for item in items.find_all('a'):
 				url3 = item.get('href')
 				self.get_districts(url3)
 		return self.urls
 if __name__ == '__main__':
-	 fo = open("test.log",'w+')
-	 sys.stdout = fo
-	 p = Prepare()
-	 p.get_urls()
+	urlmanager = UrlManager()
+	p = Prepare()
+	fo = open("url.log",'w+')
+	s = sys.stdout
+	sys.stdout = fo
+	if urlmanager.has_new_url()==False:
+		ulist = p.get_urls()
+		print '####################get ulist ok !!'
+		urlmanager.add_new_urls(ulist)
+		urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
+		urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
+	sys.stdout = s

@@ -27,6 +27,7 @@ FIELDS_TO_EXPORT = [
     'shop',
     'district',
     'street',
+	'address',
 	'comments_count',
 	'is_more_than_100',
 	'price',
@@ -50,6 +51,9 @@ FIELDS_TO_EXPORT = [
 ROBOTSTXT_OBEY = False
 DOWNLOAD_DELAY = 1
 COOKIES_ENABLED = False
+RETRY_TIMES =8
+DEPTH_LIMIT= 2
+DOWNLOAD_TIMEOUT = 300
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 

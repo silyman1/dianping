@@ -47,17 +47,23 @@ class DianpingSpider(Spider):
 		print '####################init spider ok !!'
 	def start_requests(self):
 		if self.urlmanager.has_new_url()==False:
+			print 'finish .......................................................'
+			return
 			ulist = self.p.get_urls()
 			print '####################get ulist ok !!'
 			self.urlmanager.add_new_urls(ulist)
 			self.urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
 			self.urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
+		print 'current:urls num:',self.urlmanager.new_urls_size()
 		while self.urlmanager.has_new_url():
 			new_url = self.urlmanager.get_new_url()
+			# self.urlmanager.save_urls_process_status(self.urlmanager.new_urls,r'new_urls.txt')
+			# self.urlmanager.save_urls_process_status(self.urlmanager.crawled_urls,r'crawled_urls.txt')
 		# for type in self.foodtypes:
 			# for lo in self.locations:
 				# url = self.base_url + str(type) + str(lo)
 				# choice = random.randint(0,12)
+			print 'current~~~~urls num:',self.urlmanager.new_urls_size()
 			yield scrapy.Request(url=new_url,headers = self.headers,callback=self.next_page)
 	def next_page(self,response):
 		url = str(response.url)
@@ -65,8 +71,8 @@ class DianpingSpider(Spider):
 		pages = soup.find('div',attrs={"class":'page'})
 		print 'firsturl:',url,'count:',self.count
 		if url.startswith('https://verify.meituan.com/'):
-			self.urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
-			self.urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
+			self.urlmanager.save_urls_process_status(self.urlmanager.new_urls,r'new_urls.txt')
+			self.urlmanager.save_urls_process_status(self.urlmanager.crawled_urls,r'crawled_urls.txt')
 			self.crawler.engine.close_spider(self, u'出现验证码,关闭爬虫')
 		if pages:
 			temp = pages.find_all('a')
@@ -86,10 +92,10 @@ class DianpingSpider(Spider):
 			# choice = random.randint(0,12)
 			# yield scrapy.Request(url=str(shop_url.extract()), headers = self.headers[choice],callback=self.parse_detail)
 	def parse_detail(self,response):
-		print '========detail url',str(response.url)
-		if url.startswith('https://verify.meituan.com/'):
-			self.urlmanager.save_urls_process_status(urlmanager.new_urls,r'new_urls.txt')
-			self.urlmanager.save_urls_process_status(urlmanager.crawled_urls,r'crawled_urls.txt')
+		print '========detail url',str(response.url),'count:',self.count
+		if response.url.startswith('https://verify.meituan.com/'):
+			self.urlmanager.save_urls_process_status(self.urlmanager.new_urls,r'new_urls.txt')
+			self.urlmanager.save_urls_process_status(self.urlmanager.crawled_urls,r'crawled_urls.txt')
 			self.crawler.engine.close_spider(self, u'出现验证码,关闭爬虫')
 		if response.status != 200:
 			fx =open("403.txt",'a+')
@@ -158,13 +164,29 @@ class DianpingSpider(Spider):
 							self.curkey =self.d.get_ug
 						elif index.startswith('ge'):
 							self.curkey = self.d.get_ge
+						elif index.startswith('qxm'):
+							self.curkey = self.d.get_qxm
+						elif index.startswith('ktg'):
+							self.curkey = self.d.get_ktg
+						elif index.startswith('uci'):
+							self.curkey = self.d.get_uci
+						elif index.startswith('ws'):
+							self.curkey = self.d.get_ws
+						elif index.startswith('pld'):
+							self.curkey = self.d.get_pld
+						elif index.startswith('wqb'):
+							self.curkey = self.d.get_wqb
+						elif index.startswith('zrr'):
+							self.curkey = self.d.get_zrr
+						elif index.startswith('dw'):
+							self.curkey = self.d.get_dw
 						count +=self.curkey(index)
 				item['comments_count'] = count
 			else:
 				item['comments_count'] = 0
 			print 'comments:',item['comments_count']
 			#评论数大于100
-			if int(item['comments_count'])>100:
+			if int(item['comments_count'])>14:
 				item['is_more_than_100'] = u'是'
 			else:
 				item['is_more_than_100'] = u'否'
@@ -178,6 +200,26 @@ class DianpingSpider(Spider):
 						p += i.string
 					else:
 						index = i.get('class')[0]
+						if index.startswith('ug'):
+							self.curkey =self.d.get_ug
+						elif index.startswith('ge'):
+							self.curkey = self.d.get_ge
+						elif index.startswith('qxm'):
+							self.curkey = self.d.get_qxm
+						elif index.startswith('ktg'):
+							self.curkey = self.d.get_ktg
+						elif index.startswith('uci'):
+							self.curkey = self.d.get_uci
+						elif index.startswith('ws'):
+							self.curkey = self.d.get_ws
+						elif index.startswith('pld'):
+							self.curkey = self.d.get_pld
+						elif index.startswith('wqb'):
+							self.curkey = self.d.get_wqb
+						elif index.startswith('zrr'):
+							self.curkey = self.d.get_zrr
+						elif index.startswith('dw'):
+							self.curkey = self.d.get_dw
 						p += self.curkey(index)
 				item['price'] = p.replace('￥','') 
 			else:
@@ -187,18 +229,18 @@ class DianpingSpider(Spider):
 			print(type(item['price']))
 			if item['price'] == u'未知':
 				item['price_range'] =u'未知'
-			elif int(item['price']) <20:
-				item['price_range'] ='0-20元'
-			elif int(item['price']) >=20 and int(item['price'])<50:
-				item['price_range'] ='20-50元'
-			elif int(item['price']) >=50 and int(item['price'])<100:
-				item['price_range'] ='50-100元'
+			elif int(item['price']) <30:
+				item['price_range'] ='0-30元'
+			elif int(item['price']) >=30 and int(item['price'])<60:
+				item['price_range'] ='30-60元'
+			elif int(item['price']) >=60 and int(item['price'])<100:
+				item['price_range'] ='60-100元'
 			elif int(item['price']) >=100 and int(item['price'])<200:
 				item['price_range'] ='100-200元'
-			elif int(item['price']) >=200 and int(item['price'])<500:
-				item['price_range'] ='200-500元'
-			elif int(item['price']) >=500:
-				item['price_range'] ='500元以上'
+			# elif int(item['price']) >=200 and int(item['price'])<500:
+				# item['price_range'] ='200-500元'
+			elif int(item['price']) >=200:
+				item['price_range'] ='200元以上'
 			temp3 = shopitem.find('div',attrs={'class':'txt'}).find('span',attrs={'class':'comment-list'})
 			if temp3:
 				try:

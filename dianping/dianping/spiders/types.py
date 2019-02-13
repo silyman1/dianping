@@ -8,7 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 class Prepare(object):
 	def __init__(self):
-		self.base_url = 'http://www.dianping.com/shanghai/ch10'
+		self.base_url = 'http://www.dianping.com/xiamen/ch10'
 		self.headers = {
             'Host':'www.dianping.com',
             'User-Agent':'Mozilla/5.0 (Linux; U; Android 4.1.2; zh-cn; Chitanda/Akari) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 MicroMessenger/6.0.0.58_r884092.501 NetType/WIFI'
@@ -53,10 +53,12 @@ class Prepare(object):
 			items = soup2.find('div',attrs = {'id':'region-nav-sub'})
 			if(items == None):
 				print 'error:',url2
-				self.urls.append(url2)
 				continue
 			for item in items.find_all('a'):
 				url4 = item.get('href')
+				if item.string == u'不限':
+					print 'buxian'
+					continue
 				self.count +=1
 				print self.count,':',url4
 				self.urls.append(url4)
@@ -76,6 +78,9 @@ class Prepare(object):
 				continue
 			for item in items.find_all('a'):
 				url3 = item.get('href')
+				if item.string == u'不限':
+					print 'buxian'
+					continue
 				self.get_districts(url3)
 		return self.urls
 if __name__ == '__main__':

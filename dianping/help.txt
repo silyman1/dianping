@@ -1,0 +1,1 @@
+scrapy crawl test -s JOBDIR=crawls/dianping-xm2 -o xiamen2.csv
